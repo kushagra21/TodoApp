@@ -9,3 +9,14 @@ export const getCurrentDate = () => {
   // You can turn it in to your desired format
   return date + '-' + month + '-' + year; //format: dd-mm-yyyy;
 };
+
+export const characterLimit = (data,limit) => {
+  if(data.length <= limit)
+  {
+    return data
+  }
+  else
+  {
+    return (data.substring(0,limit) + "...")
+  }
+}
