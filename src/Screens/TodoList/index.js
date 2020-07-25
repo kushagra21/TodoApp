@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Button
 } from 'react-native';
+import {getAllTasks, saveTask,clearStorage,editTask , markComplete , removeTask} from "../../Util/TodoHelper"
 
 // const styles = StyleSheet.create({
 //     MainContainer: {
@@ -22,7 +23,7 @@ import {
       };
     }
 
-    componentDidMount()
+    async componentDidMount()
     {
         console.log("Props : ",this.props)
         this.props.navigation.setOptions({
@@ -30,6 +31,17 @@ import {
               <Button onPress={() => this.goToAddTask()} title="Add" />
             ),
           });
+        //   await clearStorage()
+        //   saveTask("I have two assignments")
+        // await editTask(4405,"This should be edited")
+        // await markComplete(4405,true)
+        // await removeTask(4405)
+    }
+
+    async retrieveTasks()
+    {
+        let data = await getAllTasks()
+        console.log("Total : ",data)
     }
 
     goToAddTask()
@@ -47,6 +59,7 @@ import {
                 <View>
                     <Text>Todo list</Text>
                 </View>
+                <Button onPress={() => {this.retrieveTasks()}} title="All Todo"/>
             </SafeAreaView>
         )
     }
