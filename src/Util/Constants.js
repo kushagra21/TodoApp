@@ -1,4 +1,5 @@
 export const COLORS = {
     background : "#FFFFFF",
-    disabled : "#bfbfbf"
+    disabled : "#bfbfbf",
+    blue : "#0099ff"
 }

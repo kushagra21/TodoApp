@@ -15,6 +15,7 @@
     "@react-native-community/checkbox": "^0.4.2",
     "@react-native-community/cli-platform-ios": "3.0.0",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-community/picker": "^1.6.5",
     "@react-navigation/native": "^5.7.1",
     "@react-navigation/stack": "^5.7.1",
     "react": "16.11.0",
