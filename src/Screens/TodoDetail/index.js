@@ -6,7 +6,9 @@ import {
   Button,
   TouchableOpacity,
   StyleSheet,
-  Platform
+  Platform,
+  TextInput,
+  Dimensions
 } from 'react-native';
 
 import {COLORS} from "../../Util/Constants"
@@ -19,13 +21,44 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerBtnTextAndroid: {color: COLORS.blue, fontWeight: '700'},
+  body : {
+    backgroundColor :"#f5f5f5",
+    width: 600,
+    margin: 0,
+    padding: 10,
+    minHeight : "90%"
+  },
+  header : {
+    color: "#404040",
+    fontSize: 40,
+    letterSpacing: 2,
+    textAlign: "left",
+    marginBottom : 40
+  },
+  pageMargin : {
+    borderLeftWidth: 2,
+    borderLeftColor : "#e6b800",
+    borderRightWidth: 2,
+    borderRightColor : "#e6b800",
+    minHeight: "82%",
+    marginLeft: 30,
+    textAlign:"left"
+  },
+  pageLine : {
+    width: "90%",
+    height : 1,
+    marginLeft : -40,
+    backgroundColor: "#d9d9d9",
+    marginTop : 40
+  }
 });
 
 class TodoDetail extends Component {
   constructor() {
     super();
     this.state = {
-      dataSource: [],
+      data: "This is going to be a big day and i'm just wondering what to do and what not to This is going to be a big day and i'm just wondering what to do and what not to ",
+      type : "add"
     };
   }
 
@@ -37,6 +70,7 @@ class TodoDetail extends Component {
   handleHeaderOptions() {
     const {route} = this.props;
     let data = route.params;
+    this.setState({type : data.type})
     this.props.navigation.setOptions({
       title: data.type === 'edit' ? 'Edit Todo' : 'New Todo',
       headerRight: () =>
@@ -54,15 +88,79 @@ class TodoDetail extends Component {
     });
   }
 
+  // renderLines()
+  // {
+  //     let totalHeight = Dimensions.get('window').height 
+  //     let counts = Math.round(totalHeight / 40)
+  //     for (i of counts)
+  //     {
+        
+  //     }
+  // }
+
   render() {
+    const {type} = this.state
+
+    let totalHeight = Dimensions.get('window').height 
+    let counts = Math.round(totalHeight / 40)
+
     return (
       <SafeAreaView>
-        <View>
-          <Text>Todo Detail</Text>
+        <View style={styles.body}>
+          <Text style={styles.header}>
+            {type === 'edit' ? 'Edit Note' : 'Write a note'}
+          </Text>
+          <View style={styles.pageMargin}>
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            <Text style={styles.pageLine} />
+            
+            <TextInput
+              style={{
+                height: 40,
+                borderColor: 'gray',
+                borderWidth: 1,
+                borderColor: '#fff',
+                minHeight: '80%',
+                // backgroundColor : "#ffd6cc",
+                color : "#595959",
+                position : "absolute",
+                top : 0,
+                width : "65%",
+                height : "100%",
+                // opacity : 0.2,
+                textAlignVertical: 'top',
+                lineHeight : 40,
+                fontWeight : "700",
+                fontSize : 16
+              }}
+              onChangeText={text => this.setState({data: text})}
+              value={this.state.data}
+              multiline = {true}
+            />
+          </View>
         </View>
       </SafeAreaView>
     );
   }
 }
+
+{/* <TextInput
+style={{ height: 40, borderColor: 'gray', borderWidth: 1 , borderColor : "#fff" , minHeight: "80%" }}
+onChangeText={text => this.setState({data : text})}
+value={this.state.data}
+/> */}
 
 export default TodoDetail;
