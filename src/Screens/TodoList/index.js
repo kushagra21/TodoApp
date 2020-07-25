@@ -46,6 +46,7 @@ import {TaskCard} from "../../Components"
 
     async retrieveTasks() {
       let data = await getAllTasks();
+      console.log("All Task : ",data)
       this.setState({dataSource: data === null ? [] : data});
     }
 
