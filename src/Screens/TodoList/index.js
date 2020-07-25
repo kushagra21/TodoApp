@@ -70,7 +70,6 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
 
     async retrieveTasks() {
       let data = await getAllTasks();
-      console.log('All Task : ', data);
       this.setState({dataSource: data === null ? [] : data},() => {this.filterData()});
     }
 
@@ -124,6 +123,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
           }}
           markTask={async () => {
             await markComplete(data.id, !data.isComplete);
+            this.retrieveTasks()
           }}
         />
       );
