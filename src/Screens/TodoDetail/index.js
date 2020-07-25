@@ -3,48 +3,66 @@ import {
   View,
   Text,
   SafeAreaView,
-  Button
+  Button,
+  TouchableOpacity,
+  StyleSheet,
+  Platform
 } from 'react-native';
 
-// const styles = StyleSheet.create({
-//     MainContainer: {
-//       justifyContent: 'center',
-//       flex: 1,
-//       paddingTop: 30,
-//     }
-//   });
+import {COLORS} from "../../Util/Constants"
 
-  class TodoDetail extends Component {
-    constructor() {
-      super();
-      this.state = {
-        dataSource: [],
-      };
-    }
+const styles = StyleSheet.create({
+  headerBtnAndroid: {
+    width: 60,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerBtnTextAndroid: {color: COLORS.blue, fontWeight: '700'},
+});
 
-    componentDidMount()
-    {
-        console.log("Props : ",this.props)
-        const {route} = this.props
-        let data = route.params
-        this.props.navigation.setOptions({
-            title: (data.type === "edit"?"Edit Todo":"New Todo"),
-            headerRight: () => (
-              <Button onPress={() => console.log("")} title="Done" />
-            ),
-          });
-    }
+class TodoDetail extends Component {
+  constructor() {
+    super();
+    this.state = {
+      dataSource: [],
+    };
+  }
 
-    render()
-    {
-        return(
-            <SafeAreaView>
-                <View>
-                    <Text>Todo Detail</Text>
-                </View>
-            </SafeAreaView>
-        )
-    }
+  componentDidMount() {
+    // console.log('Props : ', this.props);
+    this.handleHeaderOptions()
+  }
+
+  handleHeaderOptions() {
+    const {route} = this.props;
+    let data = route.params;
+    this.props.navigation.setOptions({
+      title: data.type === 'edit' ? 'Edit Todo' : 'New Todo',
+      headerRight: () =>
+        Platform.OS === 'ios' ? (
+          <Button onPress={() => console.log('')} title="Done" />
+        ) : (
+          <TouchableOpacity
+            style={styles.headerBtnAndroid}
+            onPress={() => {
+              console.log('');
+            }}>
+            <Text style={styles.headerBtnTextAndroid}>Done</Text>
+          </TouchableOpacity>
+        ),
+    });
+  }
+
+  render() {
+    return (
+      <SafeAreaView>
+        <View>
+          <Text>Todo Detail</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
 
-export default TodoDetail
+export default TodoDetail;

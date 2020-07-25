@@ -7,13 +7,14 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Platform
 } from 'react-native';
 import {getAllTasks, saveTask,clearStorage,editTask , markComplete , removeTask} from "../../Util/TodoHelper"
 import {TaskCard} from "../../Components"
 import OptionsIOS from "../../Components/atom/OptionsIOS"
 import {COLORS} from "../../Util/Constants"
-import { color } from 'react-native-reanimated';
+import {Picker} from '@react-native-community/picker';
 
 const styles = StyleSheet.create({
     FilterViewIOS: {
@@ -33,7 +34,10 @@ const styles = StyleSheet.create({
       width: '20%',
       justifyContent: 'center',
       paddingLeft: 10,
-    }
+    },
+    headerBtnAndroid : {width : 60 , height : 40 , justifyContent : "center" , alignItems : "center"},
+    headerBtnTextAndroid : {color : COLORS.blue , fontWeight : "700"},
+    filterViewAndroid :{backgroundColor: COLORS.background , paddingRight : 15 , paddingLeft : 15}
   });
 
 const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type : "Completed"}, {name : "Active" , type : "Active"}]
@@ -54,7 +58,6 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       this.retrieveTasks();
 
       // await clearStorage()
-      // saveTask("I have two assignments")
       // await editTask(4405,"This should be edited")
       // await markComplete(4405,true)
       // await removeTask(4405)
@@ -62,15 +65,26 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
 
     handleHeaderOptions() {
       this.props.navigation.setOptions({
-        headerRight: () => (
-          <Button onPress={() => this.goToAddTask()} title="Add" />
-        ),
+        headerRight: () =>
+          Platform.OS === 'ios' ? (
+            <Button onPress={() => this.goToAddTask()} title="Add" />
+          ) : (
+            <TouchableOpacity
+              style={styles.headerBtnAndroid}
+              onPress={() => {
+                this.goToAddTask();
+              }}>
+              <Text style={styles.headerBtnTextAndroid}>Add</Text>
+            </TouchableOpacity>
+          ),
       });
     }
 
     async retrieveTasks() {
       let data = await getAllTasks();
-      this.setState({dataSource: data === null ? [] : data},() => {this.filterData()});
+      this.setState({dataSource: data === null ? [] : data}, () => {
+        this.filterData();
+      });
     }
 
     goToAddTask() {
@@ -123,7 +137,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
           }}
           markTask={async () => {
             await markComplete(data.id, !data.isComplete);
-            this.retrieveTasks()
+            this.retrieveTasks();
           }}
         />
       );
@@ -151,11 +165,36 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       );
     }
 
+    renderFilterAndroid() {
+      return (
+        <View style={styles.filterViewAndroid}>
+          <Picker
+              selectedValue={this.state.selectedFilter}
+              style={{height: 50, width: "100%"}}
+              onValueChange={(itemValue, itemIndex) => {
+                this.setState({selectedFilter: itemValue}, () => {
+                  this.filterData();
+                });
+              }}>
+              {filterOption.map((item, index) => {
+                return (
+                  <Picker.Item
+                    key={index}
+                    label={`Filter : ${item.name}`}
+                    value={item.type}
+                  />
+                );
+              })}
+            </Picker>
+        </View>
+      );
+    }
+
     render() {
       const {filtered} = this.state;
       return (
         <SafeAreaView>
-          {this.renderFilterIOS()}
+          {Platform.OS === "ios"?this.renderFilterIOS():this.renderFilterAndroid()}
           <FlatList
             style={{minHeight: Dimensions.get('window').height - 40}}
             key={filtered.length}
@@ -163,17 +202,19 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
             data={filtered}
             renderItem={({item, index}) => this.renderTaskCard(item, index)}
           />
-          <OptionsIOS
+          {Platform.OS === "ios" && <OptionsIOS
             isVisible={this.state.showModal}
             selectOption={() => {
-              this.setState({showModal: false},() => {this.filterData()});
+              this.setState({showModal: false}, () => {
+                this.filterData();
+              });
             }}
             selected={this.state.selectedFilter}
             filterOptions={filterOption}
             onFilterChange={value => {
               this.setState({selectedFilter: value});
             }}
-          />
+          />}
         </SafeAreaView>
       );
     }
