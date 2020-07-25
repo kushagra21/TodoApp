@@ -1,0 +1,38 @@
+{
+  "name": "Todos",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "npx react-native run-android",
+    "ios": "npx react-native run-ios",
+    "start": "npx react-native start",
+    "test": "jest",
+    "lint": "eslint .",
+    "build_apk": "cd android && ./gradlew assembleRelease && cd .."
+  },
+  "dependencies": {
+    "@react-native-community/cli-platform-ios": "3.0.0",
+    "@react-native-community/masked-view": "^0.1.10",
+    "@react-navigation/native": "^5.7.1",
+    "@react-navigation/stack": "^5.7.1",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
+    "react-native-gesture-handler": "^1.7.0",
+    "react-native-reanimated": "^1.10.1",
+    "react-native-safe-area-context": "^3.1.1",
+    "react-native-screens": "^2.9.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "react-test-renderer": "16.11.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
