@@ -50,6 +50,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
         filtered: [],
         showModal: false,
         selectedFilter: 'All',
+        randomizer : 0
       };
     }
 
@@ -61,6 +62,28 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       // await editTask(4405,"This should be edited")
       // await markComplete(4405,true)
       // await removeTask(4405)
+    }
+
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //   if (nextProps.route.params !== undefined) {
+    //     if (nextProps.route.params.actionPerformed !== undefined) {
+    //       return {actionPerformed: true};
+    //     }
+    //   }
+    //   return null
+    // }
+
+    componentDidUpdate(prevProps, prevState) {
+      if(this.props.route.params !== undefined)
+      {
+        if(this.props.route.params.randomizer !== undefined)
+        {
+          let random = this.props.route.params.randomizer
+          if (random !== this.state.randomizer) {
+            this.setState({randomizer : random} , () => {this.retrieveTasks()})
+        }
+        }
+      }
     }
 
     handleHeaderOptions() {
@@ -133,6 +156,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
           goToDetail={() => {
             navigation.navigate('Detail', {
               type: 'edit',
+              task: data,
             });
           }}
           markTask={async () => {
@@ -169,23 +193,23 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       return (
         <View style={styles.filterViewAndroid}>
           <Picker
-              selectedValue={this.state.selectedFilter}
-              style={{height: 50, width: "100%"}}
-              onValueChange={(itemValue, itemIndex) => {
-                this.setState({selectedFilter: itemValue}, () => {
-                  this.filterData();
-                });
-              }}>
-              {filterOption.map((item, index) => {
-                return (
-                  <Picker.Item
-                    key={index}
-                    label={`Filter : ${item.name}`}
-                    value={item.type}
-                  />
-                );
-              })}
-            </Picker>
+            selectedValue={this.state.selectedFilter}
+            style={{height: 50, width: '100%'}}
+            onValueChange={(itemValue, itemIndex) => {
+              this.setState({selectedFilter: itemValue}, () => {
+                this.filterData();
+              });
+            }}>
+            {filterOption.map((item, index) => {
+              return (
+                <Picker.Item
+                  key={index}
+                  label={`Filter : ${item.name}`}
+                  value={item.type}
+                />
+              );
+            })}
+          </Picker>
         </View>
       );
     }
@@ -194,7 +218,9 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       const {filtered} = this.state;
       return (
         <SafeAreaView>
-          {Platform.OS === "ios"?this.renderFilterIOS():this.renderFilterAndroid()}
+          {Platform.OS === 'ios'
+            ? this.renderFilterIOS()
+            : this.renderFilterAndroid()}
           <FlatList
             style={{minHeight: Dimensions.get('window').height - 40}}
             key={filtered.length}
@@ -202,19 +228,21 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
             data={filtered}
             renderItem={({item, index}) => this.renderTaskCard(item, index)}
           />
-          {Platform.OS === "ios" && <OptionsIOS
-            isVisible={this.state.showModal}
-            selectOption={() => {
-              this.setState({showModal: false}, () => {
-                this.filterData();
-              });
-            }}
-            selected={this.state.selectedFilter}
-            filterOptions={filterOption}
-            onFilterChange={value => {
-              this.setState({selectedFilter: value});
-            }}
-          />}
+          {Platform.OS === 'ios' && (
+            <OptionsIOS
+              isVisible={this.state.showModal}
+              selectOption={() => {
+                this.setState({showModal: false}, () => {
+                  this.filterData();
+                });
+              }}
+              selected={this.state.selectedFilter}
+              filterOptions={filterOption}
+              onFilterChange={value => {
+                this.setState({selectedFilter: value});
+              }}
+            />
+          )}
         </SafeAreaView>
       );
     }

@@ -10,8 +10,10 @@ import {
   TextInput,
   Dimensions
 } from 'react-native';
-
 import {COLORS} from "../../Util/Constants"
+import {saveTask,editTask,removeTask} from "../../Util/TodoHelper"
+import {randomIntFromInterval} from "../../Util/CommonUtils"
+
 
 const styles = StyleSheet.create({
   headerBtnAndroid: {
@@ -57,35 +59,59 @@ class TodoDetail extends Component {
   constructor() {
     super();
     this.state = {
-      data: "This is going to be a big day and i'm just wondering what to do and what not to This is going to be a big day and i'm just wondering what to do and what not to ",
-      type : "add"
+      noteText: "",
+      type : "add",
+      task : null
     };
   }
 
   componentDidMount() {
-    // console.log('Props : ', this.props);
+    console.log('Props : ', this.props);
     this.handleHeaderOptions()
   }
 
   handleHeaderOptions() {
     const {route} = this.props;
     let data = route.params;
-    this.setState({type : data.type})
+    this.setState({type : data.type , task : data.task ? data.task : null  ,noteText : data.task ? data.task.task : "" })
     this.props.navigation.setOptions({
       title: data.type === 'edit' ? 'Edit Todo' : 'New Todo',
       headerRight: () =>
         Platform.OS === 'ios' ? (
-          <Button onPress={() => console.log('')} title="Done" />
+          <Button onPress={() => this.handleSave()} title="Done" />
         ) : (
           <TouchableOpacity
             style={styles.headerBtnAndroid}
             onPress={() => {
-              console.log('');
+              this.handleSave();
             }}>
             <Text style={styles.headerBtnTextAndroid}>Done</Text>
           </TouchableOpacity>
         ),
     });
+  }
+
+  async handleSave()
+  {
+    const {type , task , noteText} = this.state
+
+    if(type === "add")
+    {
+        await saveTask(noteText)
+        this.props.navigation.navigate('Tasks', {
+        actionPerformed: 'add',
+        randomizer : randomIntFromInterval(1,10000)
+      });
+    }
+
+    if(type === "edit")
+    {
+        await editTask(task.id , noteText)
+        this.props.navigation.navigate('Tasks', {
+          actionPerformed: 'edit',
+          randomizer : randomIntFromInterval(1,10000)
+      });
+    }
   }
 
   // renderLines()
@@ -146,8 +172,8 @@ class TodoDetail extends Component {
                 fontWeight : "700",
                 fontSize : 16
               }}
-              onChangeText={text => this.setState({data: text})}
-              value={this.state.data}
+              onChangeText={text => this.setState({noteText: text})}
+              value={this.state.noteText}
               multiline = {true}
             />
           </View>
