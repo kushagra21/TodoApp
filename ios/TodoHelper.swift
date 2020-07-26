@@ -93,7 +93,7 @@ class TodoHelper : RCTEventEmitter {
                     "task": data,
                     "isComplete": task["isComplete"]!,
                     "createdOn": task["createdOn"]!,
-                    "edited": task["edited"]!,
+                    "edited": (task["edited"]!) as! Int + 1,
                   ]
                   updated.append(updatedTask)
               }
