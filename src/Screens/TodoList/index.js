@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Platform
 } from 'react-native';
-import {getAllTasks, saveTask,clearStorage,editTask , markComplete , removeTask} from "../../Util/TodoHelper"
+import {getAllTasks, markComplete } from "rn-todo-helper"
 import {TaskCard} from "../../Components"
 import OptionsIOS from "../../Components/atom/OptionsIOS"
 import {COLORS} from "../../Util/Constants"

@@ -15,7 +15,7 @@ import {
   Image
 } from 'react-native';
 import {COLORS} from "../../Util/Constants"
-import {saveTask,editTask,removeTask} from "../../Util/TodoHelper"
+import {saveTask,editTask,removeTask} from "rn-todo-helper"
 import {randomIntFromInterval} from "../../Util/CommonUtils"
 
 
