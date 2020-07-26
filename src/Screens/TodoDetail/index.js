@@ -9,7 +9,10 @@ import {
   Platform,
   TextInput,
   Dimensions,
-  ScrollView
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Image
 } from 'react-native';
 import {COLORS} from "../../Util/Constants"
 import {saveTask,editTask,removeTask} from "../../Util/TodoHelper"
@@ -125,6 +128,15 @@ class TodoDetail extends Component {
     }
   }
 
+  async deleteTask()
+  {
+    await removeTask(this.state.task.id);
+    this.props.navigation.navigate('Tasks', {
+      actionPerformed: 'edit',
+      randomizer: randomIntFromInterval(1, 10000),
+    });
+  }
+
   getPageLineCount() {
     let totalHeight = Dimensions.get('window').height;
     let counts = Math.round(totalHeight / 40 - 5);
@@ -135,6 +147,11 @@ class TodoDetail extends Component {
     return arr;
   }
 
+  handleKeyDown(e) {
+    if(e.nativeEvent.key == "Enter"){
+       Keyboard.dismiss()
+    }
+}
   render() {
     const {type} = this.state;
 
@@ -143,50 +160,58 @@ class TodoDetail extends Component {
 
     return (
       <SafeAreaView>
-        <View style={styles.body}>
-          <Text style={styles.header}>
-            {type === 'edit' ? 'Edit Note' : 'Write a note'}
-          </Text>
-          <ScrollView>
-            <View style={styles.pageMargin}>
-              {totalLine.map(element => {
-                return <Text key={element.val} style={styles.pageLine} />;
-              })}
-              <TextInput
-                style={{
-                  height: 40,
-                  borderColor: 'gray',
-                  borderWidth: 1,
-                  borderColor: '#fff',
-                  minHeight: '80%',
-                  // backgroundColor : "#ffd6cc",
-                  color: '#595959',
-                  position: 'absolute',
-                  top: 0,
-                  width: '65%',
-                  height: '100%',
-                  // opacity : 0.2,
-                  textAlignVertical: 'top',
-                  lineHeight: 40,
-                  fontWeight: '700',
-                  fontSize: 16,
-                }}
-                onChangeText={text => this.setState({noteText: text})}
-                value={this.state.noteText}
-                multiline={true}
-              />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.body}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{width : "60%"}}>
+              <Text style={styles.header}>
+                {type === 'edit' ? 'Edit Note' : 'Write a note'}
+              </Text>
+              </View>
+              {this.state.type === "edit" && <TouchableWithoutFeedback onPress={() => {this.deleteTask()}}>
+                <Image
+                  style={{width: 40, height: 40}}
+                  source={require('../../Assets/images/delete_bin.png')}
+                />
+              </TouchableWithoutFeedback>}
             </View>
-          </ScrollView>
-        </View>
+            <ScrollView onPress={Keyboard.dismiss}>
+              <View style={styles.pageMargin}>
+                {totalLine.map(element => {
+                  return <Text key={element.val} style={styles.pageLine} />;
+                })}
+                <TextInput
+                  style={{
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    borderColor: '#fff',
+                    minHeight: '80%',
+                    // backgroundColor : "#ffd6cc",
+                    color: '#595959',
+                    position: 'absolute',
+                    top: 0,
+                    width: '65%',
+                    height: '100%',
+                    // opacity : 0.2,
+                    textAlignVertical: 'top',
+                    lineHeight: 40,
+                    fontWeight: '700',
+                    fontSize: 16,
+                  }}
+                  onChangeText={text => this.setState({noteText: text})}
+                  value={this.state.noteText}
+                  multiline={true}
+                  returnKeyType="done"
+                  onKeyPress={this.handleKeyDown}
+                />
+              </View>
+            </ScrollView>
+          </View>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
     );
   }
 }
-
-{/* <TextInput
-style={{ height: 40, borderColor: 'gray', borderWidth: 1 , borderColor : "#fff" , minHeight: "80%" }}
-onChangeText={text => this.setState({data : text})}
-value={this.state.data}
-/> */}
 
 export default TodoDetail;
