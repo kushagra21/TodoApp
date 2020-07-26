@@ -13,7 +13,15 @@ class TodoHelper : RCTEventEmitter {
   let defaults = UserDefaults.standard
   let STORAGE_KEY : String = "@stored_tasks"
 
-  let value : [String : Any] = ["name" : "name", "isCompleted" : false]
+  func getCurrentDate() -> String
+  {
+      let formatter = DateFormatter()
+      formatter.dateFormat = "dd-MM-yyyy"
+      let currentDateString = formatter.string(from: Date())
+      let currentFormattedDate = formatter.date(from: currentDateString)
+      let output = formatter.string(from: currentFormattedDate!)
+      return output
+  }
 
   func getAllValue() -> [[String : Any]]
   {
@@ -34,7 +42,7 @@ class TodoHelper : RCTEventEmitter {
         "id": Int.random(in: 0 ... 100000),
         "task": data,
         "isComplete": false,
-        "createdOn": Date(),
+        "createdOn": getCurrentDate(),
         "edited": 0,
       ]
       
@@ -71,7 +79,7 @@ class TodoHelper : RCTEventEmitter {
         "id": Int.random(in: 0 ... 100000),
         "task": data,
         "isComplete": false,
-        "createdOn": Date(),
+        "createdOn": getCurrentDate(),
         "edited": 0,
       ]
       
@@ -143,15 +151,6 @@ class TodoHelper : RCTEventEmitter {
       defaults.removeObject(forKey:STORAGE_KEY)
 
   }
-
-//  saveTask(data: "This is just the start")
-  //removeTask(id: 3995)
-  //editTask(id: 26071, data: "You just got edited")
-  //markComplete(id: 26071, isDone: true)
-  //clearStorage()
-//  let v = getAllValue()
-//  print("Total Tasks")
-//  print(v)
   
   // Bridge Methods
   
