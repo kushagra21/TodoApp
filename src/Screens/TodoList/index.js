@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  Platform
+  Platform,
+  TextInput,
+  Keyboard
 } from 'react-native';
 import {getAllTasks, markComplete } from "rn-todo-helper"
 import {TaskCard} from "../../Components"
@@ -37,7 +39,21 @@ const styles = StyleSheet.create({
     },
     headerBtnAndroid : {width : 60 , height : 40 , justifyContent : "center" , alignItems : "center"},
     headerBtnTextAndroid : {color : COLORS.blue , fontWeight : "700"},
-    filterViewAndroid :{backgroundColor: COLORS.background , paddingRight : 15 , paddingLeft : 15}
+    filterViewAndroid :{backgroundColor: COLORS.background , paddingRight : 15 , paddingLeft : 15},
+    searchBar : {
+      height: 30,
+      borderWidth: 2,
+      borderRadius: 8,
+      borderColor: '#e6e6e6',
+      textAlignVertical: 'top',
+      fontWeight: '500',
+      fontSize: 12,
+      marginLeft: 10,
+      marginRight: 10,
+      marginTop: 10,
+      marginBottom: 10,
+      paddingLeft: 5,
+    }
   });
 
 const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type : "Completed"}, {name : "Active" , type : "Active"}]
@@ -48,9 +64,11 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       this.state = {
         dataSource: [],
         filtered: [],
+        searchSubset: [],
         showModal: false,
         selectedFilter: 'All',
-        randomizer : 0
+        randomizer: 0,
+        searchText: '',
       };
     }
 
@@ -74,14 +92,14 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
     // }
 
     componentDidUpdate(prevProps, prevState) {
-      if(this.props.route.params !== undefined)
-      {
-        if(this.props.route.params.randomizer !== undefined)
-        {
-          let random = this.props.route.params.randomizer
+      if (this.props.route.params !== undefined) {
+        if (this.props.route.params.randomizer !== undefined) {
+          let random = this.props.route.params.randomizer;
           if (random !== this.state.randomizer) {
-            this.setState({randomizer : random} , () => {this.retrieveTasks()})
-        }
+            this.setState({randomizer: random}, () => {
+              this.retrieveTasks();
+            });
+          }
         }
       }
     }
@@ -122,7 +140,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       let subset = [];
       switch (selectedFilter) {
         case 'All':
-          this.setState({filtered: dataSource});
+          this.setState({filtered: dataSource, searchSubset: dataSource});
           break;
         case 'Completed':
           subset = [];
@@ -131,7 +149,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
               subset.push(val);
             }
           }
-          this.setState({filtered: subset});
+          this.setState({filtered: subset, searchSubset: subset});
           break;
         case 'Active':
           subset = [];
@@ -140,10 +158,31 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
               subset.push(val);
             }
           }
-          this.setState({filtered: subset});
+          this.setState({filtered: subset, searchSubset: subset});
           break;
         default:
-          this.setState({filtered: dataSource});
+          this.setState({filtered: dataSource, searchSubset: dataSource});
+      }
+    }
+
+    searchTask() {
+      const {filtered, searchText, searchSubset} = this.state;
+
+      let searchString = searchText;
+      searchString = searchString.trim();
+      let found;
+      if (searchString.length > 0) {
+        found = searchSubset.filter(function(element) {
+          return element.task
+            .toLowerCase()
+            .includes(searchString.toLocaleLowerCase());
+        });
+      }
+
+      if (found === undefined) {
+        this.setState({filtered: searchSubset});
+      } else {
+        this.setState({filtered: found});
       }
     }
 
@@ -214,10 +253,31 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       );
     }
 
+    handleKeyDown(e) {
+      if (e.nativeEvent.key == 'Enter') {
+        Keyboard.dismiss();
+      }
+    }
+
     render() {
       const {filtered} = this.state;
       return (
         <SafeAreaView>
+          <View style={{backgroundColor: '#FFF'}}>
+            <TextInput
+              style={styles.searchBar}
+              placeholder="Search for a todo"
+              onChangeText={text =>
+                this.setState({searchText: text}, () => {
+                  this.searchTask();
+                })
+              }
+              value={this.state.searchText}
+              multiline={true}
+              returnKeyType="done"
+              onKeyPress={this.handleKeyDown}
+            />
+          </View>
           {Platform.OS === 'ios'
             ? this.renderFilterIOS()
             : this.renderFilterAndroid()}
