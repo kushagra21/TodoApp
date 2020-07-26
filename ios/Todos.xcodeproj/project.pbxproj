@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* TodosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TodosTests.m */; };
+		0BA4CE6724CDE8B100318EF1 /* TodoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA4CE6624CDE8B100318EF1 /* TodoHelper.swift */; };
+		0BA4CE6924CDE97100318EF1 /* TodoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA4CE6824CDE97100318EF1 /* TodoHelper.m */; };
 		12CC863B57DFF529DDBFBCB5 /* libPods-Todos-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C585225AC4B5C70D47E7DFA /* libPods-Todos-tvOS.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
@@ -44,6 +46,9 @@
 		00E356EE1AD99517003FC87E /* TodosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TodosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodosTests.m; sourceTree = "<group>"; };
+		0BA4CE6524CDE8B100318EF1 /* Todos-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Todos-Bridging-Header.h"; sourceTree = "<group>"; };
+		0BA4CE6624CDE8B100318EF1 /* TodoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoHelper.swift; sourceTree = "<group>"; };
+		0BA4CE6824CDE97100318EF1 /* TodoHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodoHelper.m; sourceTree = "<group>"; };
 		0D53D1A6B132C5673F649D58 /* libPods-Todos-TodosTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Todos-TodosTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* Todos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Todos/AppDelegate.h; sourceTree = "<group>"; };
@@ -132,6 +137,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				0BA4CE6624CDE8B100318EF1 /* TodoHelper.swift */,
+				0BA4CE6524CDE8B100318EF1 /* Todos-Bridging-Header.h */,
+				0BA4CE6824CDE97100318EF1 /* TodoHelper.m */,
 			);
 			name = Todos;
 			sourceTree = "<group>";
@@ -194,7 +202,6 @@
 				D2268FEDAF8B7E4CA68ECBA8 /* Pods-Todos-tvOSTests.debug.xcconfig */,
 				AD52274E2562E80D20B927C3 /* Pods-Todos-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -292,7 +299,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1150;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -531,6 +538,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				0BA4CE6924CDE97100318EF1 /* TodoHelper.m in Sources */,
+				0BA4CE6724CDE8B100318EF1 /* TodoHelper.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -584,6 +593,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3703E46BC057F175766C70BB /* Pods-Todos-TodosTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -607,6 +617,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D73D725EDFAFC82086A5FE24 /* Pods-Todos-TodosTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = TodosTests/Info.plist;
@@ -644,6 +655,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Todos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Todos-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -666,6 +678,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Todos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Todos-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

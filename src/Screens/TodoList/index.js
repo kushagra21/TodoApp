@@ -12,7 +12,7 @@ import {
   TextInput,
   Keyboard
 } from 'react-native';
-import {getAllTasks, markComplete } from "rn-todo-helper"
+import {getAllTodos, markTodoComplete } from "../../Util/PlatformTodoHelper"
 import {TaskCard} from "../../Components"
 import OptionsIOS from "../../Components/atom/OptionsIOS"
 import {COLORS} from "../../Util/Constants"
@@ -78,8 +78,10 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
 
       // await clearStorage()
       // await editTask(4405,"This should be edited")
-      // await markComplete(4405,true)
+      // await markTodoComplete(4405,true)
       // await removeTask(4405)
+      // checkIOS()
+      // let dd = await getAllTaskIOS()
     }
 
     // static getDerivedStateFromProps(nextProps, prevState) {
@@ -122,7 +124,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
     }
 
     async retrieveTasks() {
-      let data = await getAllTasks();
+      let data = await getAllTodos();
       this.setState({dataSource: data === null ? [] : data}, () => {
         this.filterData();
       });
@@ -199,7 +201,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
             });
           }}
           markTask={async () => {
-            await markComplete(data.id, !data.isComplete);
+            await markTodoComplete(data.id, !data.isComplete);
             this.retrieveTasks();
           }}
         />

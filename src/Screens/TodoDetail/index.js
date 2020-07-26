@@ -15,7 +15,7 @@ import {
   Image
 } from 'react-native';
 import {COLORS} from "../../Util/Constants"
-import {saveTask,editTask,removeTask} from "rn-todo-helper"
+import {saveTodo,editTodo,removeTodo} from "../../Util/PlatformTodoHelper"
 import {randomIntFromInterval} from "../../Util/CommonUtils"
 
 
@@ -105,7 +105,7 @@ class TodoDetail extends Component {
     let trimmed = noteText.trim();
     if (type === 'add') {
       if (trimmed.length !== 0) {
-        await saveTask(trimmed);
+        await saveTodo(trimmed);
         this.props.navigation.navigate('Tasks', {
           actionPerformed: 'add',
           randomizer: randomIntFromInterval(1, 10000),
@@ -117,9 +117,9 @@ class TodoDetail extends Component {
 
     if (type === 'edit') {
       if (trimmed.length === 0) {
-        await removeTask(task.id);
+        await removeTodo(task.id);
       } else {
-        await editTask(task.id, trimmed);
+        await editTodo(task.id, trimmed);
       }
       this.props.navigation.navigate('Tasks', {
         actionPerformed: 'edit',
@@ -130,7 +130,7 @@ class TodoDetail extends Component {
 
   async deleteTask()
   {
-    await removeTask(this.state.task.id);
+    await removeTodo(this.state.task.id);
     this.props.navigation.navigate('Tasks', {
       actionPerformed: 'edit',
       randomizer: randomIntFromInterval(1, 10000),
