@@ -2,6 +2,8 @@
 
 A simple daily tasks app based on React Native which uses [AsyncStorage](https://react-native-community.github.io/async-storage/) and [UserDefaults](https://developer.apple.com/documentation/foundation/userdefaults) (iOS) via a native bridge for CRUD operations on task data.
 
+The app uses a platform based method wrapper with native methods via a bridge for iOS & helper methods hosted as a [library](https://github.com/kushagra21/rn-todo-helper) for Android.
+
 
 ## Steps
 
@@ -48,7 +50,7 @@ A simple daily tasks app based on React Native which uses [AsyncStorage](https:/
 
 <table>
   <tr>
-    <td valign="top"><img src="https://user-images.githubusercontent.com/13186052/87229077-e027d500-c3c2-11ea-9dc9-cbcc20ace6eb.jpg"></td>
-    <td valign="top"><img src="https://user-images.githubusercontent.com/13186052/87229092-fd5ca380-c3c2-11ea-9aad-19161018e9ce.jpg"></td>
+    <td valign="top"><img width="424" alt="ListUI" src="https://user-images.githubusercontent.com/13186052/88514921-7f2a0f00-d008-11ea-91a8-bab110c21a2f.png"></td>
+    <td valign="top"><img width="418" alt="NewNoteUI" src="https://user-images.githubusercontent.com/13186052/88514848-628dd700-d008-11ea-9b96-afa9d7e2dc1a.png"></td>
   </tr>
  </table>
