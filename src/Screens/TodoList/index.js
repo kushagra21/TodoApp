@@ -77,6 +77,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
         selectedFilter: 'All',
         randomizer: 0,
         searchText: '',
+        totalActive : 0
       };
     }
 
@@ -145,6 +146,17 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
       });
     }
 
+    totalActive() {
+      const {dataSource} = this.state;
+      let subset = [];
+      for (let val of dataSource) {
+        if (val.isComplete === false) {
+          subset.push(val);
+        }
+      }
+      this.setState({totalActive : subset.length})
+    }
+
     filterData() {
       const {filtered, dataSource, selectedFilter} = this.state;
       let subset = [];
@@ -173,6 +185,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
         default:
           this.setState({filtered: dataSource, searchSubset: dataSource});
       }
+      this.totalActive()
     }
 
     searchTask() {
@@ -221,7 +234,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
         <View style={styles.FilterViewIOS}>
           <View style={styles.filterTabIOS}>
             <Text style={styles.filterTextIOS}>
-              Filter : {this.state.selectedFilter}
+              Filter : {this.state.selectedFilter}  |  Active: {this.state.totalActive}
             </Text>
           </View>
           <TouchableOpacity
@@ -270,7 +283,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
     }
 
     render() {
-      const {filtered} = this.state;
+      const {filtered , totalActive} = this.state;
       return (
         <SafeAreaView>
           <View style={{backgroundColor: '#FFF'}}>
@@ -287,6 +300,16 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
               returnKeyType="done"
               onKeyPress={this.handleKeyDown}
             />
+            {Platform.OS === 'android' && (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingBottom: 10,
+                }}>
+                <Text>Active : {totalActive}</Text>
+              </View>
+            )}
           </View>
           {Platform.OS === 'ios'
             ? this.renderFilterIOS()
@@ -297,9 +320,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
               key={filtered.length}
               keyExtractor={(item, index) => index.toString()}
               data={filtered}
-              renderItem={({item, index}) =>
-                this.renderTaskCard(item, index)
-              }
+              renderItem={({item, index}) => this.renderTaskCard(item, index)}
             />
           )}
           {filtered.length === 0 && (
@@ -308,9 +329,7 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
                 style={{width: 90, height: 90, marginBottom: 30}}
                 source={require('../../Assets/images/empty_calendar.png')}
               />
-              <Text style={{fontSize: 18, fontWeight: '600'}}>
-                No Task
-              </Text>
+              <Text style={{fontSize: 18, fontWeight: '600'}}>No Task</Text>
             </View>
           )}
           {Platform.OS === 'ios' && (
