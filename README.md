@@ -50,7 +50,7 @@ The app uses a platform based method wrapper with native methods via a bridge fo
 
 <table>
   <tr>
-    <td valign="top"><img width="424" alt="ListUI" src="https://user-images.githubusercontent.com/13186052/88514921-7f2a0f00-d008-11ea-91a8-bab110c21a2f.png"></td>
+    <td valign="top"><img width="412" alt="TaskLIstUI" src="https://user-images.githubusercontent.com/13186052/88528882-d89c3900-d01c-11ea-9c64-41d8fd28a352.png"></td>
     <td valign="top"><img width="418" alt="NewNoteUI" src="https://user-images.githubusercontent.com/13186052/88514848-628dd700-d008-11ea-9b96-afa9d7e2dc1a.png"></td>
   </tr>
  </table>
