@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Platform,
   TextInput,
-  Keyboard
+  Keyboard,
+  Image
 } from 'react-native';
 import {getAllTodos, markTodoComplete } from "../../Util/PlatformTodoHelper"
 import {TaskCard} from "../../Components"
@@ -53,6 +54,13 @@ const styles = StyleSheet.create({
       marginTop: 10,
       marginBottom: 10,
       paddingLeft: 5,
+    },
+    noTask : {
+      justifyContent : "center",
+      alignItems : "center",
+      width : "100%",
+      height : "90%",
+      backgroundColor : "#FFF"
     }
   });
 
@@ -283,13 +291,28 @@ const filterOption = [{name : "All" , type : "All"} , {name : "Completed" , type
           {Platform.OS === 'ios'
             ? this.renderFilterIOS()
             : this.renderFilterAndroid()}
-          <FlatList
-            style={{minHeight: Dimensions.get('window').height - 40}}
-            key={filtered.length}
-            keyExtractor={(item, index) => index.toString()}
-            data={filtered}
-            renderItem={({item, index}) => this.renderTaskCard(item, index)}
-          />
+          {filtered.length > 0 && (
+            <FlatList
+              style={{minHeight: Dimensions.get('window').height - 40}}
+              key={filtered.length}
+              keyExtractor={(item, index) => index.toString()}
+              data={filtered}
+              renderItem={({item, index}) =>
+                this.renderTaskCard(item, index)
+              }
+            />
+          )}
+          {filtered.length === 0 && (
+            <View style={styles.noTask}>
+              <Image
+                style={{width: 90, height: 90, marginBottom: 30}}
+                source={require('../../Assets/images/empty_calendar.png')}
+              />
+              <Text style={{fontSize: 18, fontWeight: '600'}}>
+                No Task
+              </Text>
+            </View>
+          )}
           {Platform.OS === 'ios' && (
             <OptionsIOS
               isVisible={this.state.showModal}
